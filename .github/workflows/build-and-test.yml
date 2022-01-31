@@ -30,6 +30,6 @@ jobs:
 
     - name: Build and push
       uses: docker/build-push-action@v2
-        with:
-          push: true
-          tags: lburinov73/search_engine_crawler:latest
+      with:
+        push: true
+        tags: lburinov73/search_engine_crawler:latest
