@@ -1,3 +1,6 @@
+![Workflow status](https://github.com/lburinov73/search_engine_crawler/actions/workflows/build-and-test.yml/badge.svg)
+
+
 # Search Engine Crawler
 
 Поисковый бот для сбора текстовой информации с веб-страниц и ссылок.
