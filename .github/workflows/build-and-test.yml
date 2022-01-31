@@ -2,10 +2,6 @@ name: Run tests and build docker image
 
 on: workflow_dispatch
 
-defaults:
-  run:
-    working-directory: ./src
-
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
