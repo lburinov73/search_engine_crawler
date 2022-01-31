@@ -10,15 +10,14 @@ jobs:
     - name: Check Out Repo 
       uses: actions/checkout@v2
 
-    - name: Install Dependencies
+    - name: Setup python
       uses: actions/setup-python@v2
       with:
         python-version: '3.6'
+    
+    - name: Install Dependencies
       run: pip install -r requirements.txt -r requirements-test.txt
 
     - name: Execute tests
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.6'
       run: python -m unittest discover -s tests/
 
