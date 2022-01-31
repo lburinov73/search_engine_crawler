@@ -2,6 +2,10 @@ name: Run tests and build docker image
 
 on: workflow_dispatch
 
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
@@ -22,14 +26,36 @@ jobs:
       run: python -m unittest discover -s tests/
 
     - name: Login to GitHub Container Registry
+      id: login
       uses: docker/login-action@v1
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Docker meta
+      id: meta
+      uses: docker/metadata-action@v3
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        flavor: |
+          latest=true
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+
     - name: Build and push
+      id: docker_build
       uses: docker/build-push-action@v2
       with:
+        context: ./
+        file: ./Dockerfile
         push: true
-        tags: lburinov73/search_engine_crawler:latest
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+
+    - name: Image digest
+      run: echo ${{ steps.docker_build.outputs.digest }}
+
